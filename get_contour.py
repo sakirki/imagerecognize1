@@ -10,7 +10,7 @@ retval, im_bw = cv2.threshold(im_gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRES
 contours, hierarchy = cv2.findContours(im_bw, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
 # 輪郭を１つずつ書き込んで出力
-for i in range(len(contours))
+for i in range(len(contours)):
     im_con = im.copy()
     print('ID', i, 'Area', cv2.contourArea(contours[i]))
     im_con = cv2.drawContours(im_con, contours, i, (0,255,0), 2)
