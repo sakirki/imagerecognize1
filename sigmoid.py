@@ -2,7 +2,7 @@
 import numpy as np
 import cv2
 #ベース画像の読み込み
-img=cv2.imread("data/temp/notest.jpg")
+img=cv2.imread("take_data/off_map.jpg")
 img=img.astype(np.float32)
 #画像の輝度変化を強調する処理
 edge_value=70
