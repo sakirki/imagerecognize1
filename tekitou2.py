@@ -197,7 +197,7 @@ class image_gui():
         os.remove("./output_facerectangle_image.png")
         
     ###################
-    # γ補正メソッド     #
+    # γ補正メソッド #
     ###################
     def gamma_correction(self,image,gamma):
         # 整数型で2次元配列を作成[256,1]
@@ -231,7 +231,7 @@ class image_gui():
         gaussian_img = cv2.GaussianBlur(image,(kernel,kernel),5)
         return gaussian_img   
     
-    def onSlider(self,args):
+    def onSlider(self,args): 
         # 入力ファイルの読み出し
         img = cv2.imread(self.filepath)
         # ガンマ補正
