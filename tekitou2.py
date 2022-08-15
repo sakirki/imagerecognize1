@@ -31,12 +31,12 @@ class image_gui():
         # 参照ボタン配置
         btn3 = Button(root, text=u'参照', command=self.button1_clicked)
         btn3.grid(row=0, column=1)
-        btn3.place(x=670, y=12)
+        btn3.place(x=670, y=320)
 
         # 閉じるボタン
         close1 = Button(root,text=u'閉じる',command=self.close_clicked)
         close1.grid(row=0,column=3)
-        close1.place(x=715,y=12)
+        close1.place(x=715,y=320)
 
         # 参照ファイルパス表示ラベルの作成
         self.file1 = StringVar()
@@ -91,28 +91,21 @@ class image_gui():
         self.file1.set(self.filepath)
  
         # 画像を保存を実施するボタンの生成と配置
-        self.button6 = Button(root,text=u"画像保存", command=self.save_clicked,width=10)
+        self.button6 = Button(root,text=u"画像保存", command=self.save_clicked,width=11)
         self.button6.grid(row=0, column=3)
-        self.button6.place(x=665, y=45)
+        self.button6.place(x=670, y=290)
 
-        # ガンマ補正用のスケールバーの設定
-        self.gamma = Scale(root, label='ガンマ補正', orient='h',
-                         from_=1.0, to=3.0,length=95, command=self.onSlider,resolution=0.1)
-        self.gamma.place(x=340,y=160)
         # 彩度変更用のスケールバーの設定
         self.Saturation = Scale(root, label='彩度倍率', orient='h',
-                         from_=0.0, to=1.0,length=95, command=self.onSlider,resolution=0.1)
+                         from_=0.0, to=1.0,length=300,tickinterval=0.1,command=self.onSlider,resolution=0.01)
         self.Saturation.set(1.0)  
-        self.Saturation.place(x=340,y=215)
+        self.Saturation.place(x=20,y=60)
         # 明度変更用のスケールバーの設定
         self.Brightness = Scale(root, label='明度倍率', orient='h',
-                         from_=0.0, to=1.0,length=95, command=self.onSlider,resolution=0.1)
+                         from_=0.0, to=1.0,length=300,tickinterval=0.1,command=self.onSlider,resolution=0.01)
         self.Brightness.set(1.0)  
-        self.Brightness.place(x=340,y=270)
-        #　ぼかしのスケールバーの設定
-        self.Gaussian = Scale(root, label='ぼかし', orient='h',from_=0, to=10,length=95, command=self.onSlider,resolution=1)
-        # Gaussianfilterのカーネル値は奇数値のみだが、どうもresolution=2刻みにすると       
-
+        self.Brightness.place(x=20,y=150)
+        
         # 画像ファイル読み込みと表示用画像サイズに変更と保存
         img = cv2.imread(self.filepath)
         cv2.imwrite("input_image_file.jpeg",img)
@@ -188,7 +181,7 @@ class image_gui():
         # 顔検出と描画する
         img = self.face_detect(img)            
         # 表示用に画像サイズを小さくする
-        img2 = cv2.resize(img,dsize=(320,240))
+        img2 = cv2.resize(img,dsize=(240,240))
         # 出力画像を保存
         cv2.imwrite("output_facerectangle_image.png",img2)
         # 画像をセット
@@ -197,7 +190,7 @@ class image_gui():
         os.remove("./output_facerectangle_image.png")
         
     ###################
-    # γ補正メソッド #
+    # γ補正メソッド     #
     ###################
     def gamma_correction(self,image,gamma):
         # 整数型で2次元配列を作成[256,1]
@@ -235,20 +228,25 @@ class image_gui():
         # 入力ファイルの読み出し
         img = cv2.imread(self.filepath)
         # ガンマ補正
-        i_out = self.gamma_correction(img,float(self.gamma.get()))
+        #i_out = self.gamma_correction(img,float(self.gamma.get()))
         # 彩度、明度変更
-        i_out = self.saturation_brightness_chg(i_out,self.Saturation.get(),self.Brightness.get())
-        #ガウシアンフィルタのカーネル値を計算
-        kernel_val = self.Gaussian.get()*2+1
-        #ガウシアンフィルタによるモザイク変更
-        i_out=self.Gaussian_chg(i_out,kernel_val)
+        i_out = self.saturation_brightness_chg(img,self.Saturation.get(),self.Brightness.get())
         # GUIに表示する用の画像ファイルを作成
         cv2.imwrite("output_image.jpeg",i_out)
         self.chg_out = i_out
         # 表示用に画像サイズを小さくする
         img2 = cv2.resize(i_out,dsize=(320,240))
+        #画像の輝度変化を強調する処理
+        img2=img2.astype(np.float32)
+        #edge_valueは手動で変えてください輝度変化の値です
+        edge_value=70
+        img_edge=img2-edge_value
+        sigmoid=1/(1+np.exp(-0.1*img_edge))*255
+        sigmoid=sigmoid.astype(np.uint8)
         # 出力画像を保存
-        cv2.imwrite("output_image_small.png",img2)
+        cv2.imwrite("output_mosaic_image.png",sigmoid)
+        # 出力画像を保存
+        cv2.imwrite("output_image_small.png",sigmoid)
         # 画像をセット
         self.out_image2 = ImageTk.PhotoImage(file="output_image_small.png")
         output_canvas.create_image(160, 120, image=self.out_image2)
@@ -258,13 +256,13 @@ if __name__ == '__main__':
     root = Tk()
     root.title("Image Viewer")
     # GUI全体のフレームサイズ
-    root.geometry("770x400")
+    root.geometry("800x600")
     # 出力ファイル画像表示の場所指定とサイズ指定
     output_canvas = Canvas(root, width=320, height=240)
-    output_canvas.place(x=440, y=90)
+    output_canvas.place(x=450, y=350)
     #　入力ファイル画像表示の場所指定とサイズ指定
     input_canvas = Canvas(root, width=320, height=240)
-    input_canvas.place(x=5, y=90)
+    input_canvas.place(x=50, y=350)
     # GUI表示
     image_gui(root)
     root.mainloop()
