@@ -2,7 +2,7 @@
 
 import cv2
 
-im = cv2.imread('data/temp/yellow.jpg')
+im = cv2.imread('data/temp/map2.jpg')
 im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 retval, im_bw = cv2.threshold(im_gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
