@@ -15,8 +15,11 @@ class main:
         self.debug=false
         self.root = tk.Tk()
         self.root.title(u"カメラ撮影")
-        self.root.geometry("400x300")
-        
+        self.root.geometry("600x400")
+        '''
+        output_canvas = tk.Canvas(self.root, width=320, height=240)
+        output_canvas.place(x=400, y=90)
+        '''
         btn1=tk.Button(text="撮影開始",command=self.take_picture)
         btn1.pack()
         
@@ -26,8 +29,9 @@ class main:
             setfile = "newcamerasystem/testpic/test.txt"
             
         self.svpanel = SV_panel(self,setfile)
+        #self.svpanel.
         self.svpanel.makePanel()
-        
+    '''    
     def mouse_event(self,event, x, y, flags, param):
         if self.pickup_mode=="none":
             if event==cv2.EVENT_LBUTTONUP:
@@ -71,9 +75,9 @@ class main:
                 print ("yellow pickup")
                 self.svpanel.set_yellow_h(self.hsvchannel[0][y*2][x*2]*2)
                 self.pickup_mode="none"
-                    
+    '''                
     def take_picture(self):
-        self.pcap = cv2.VideoCapture(0)
+        self.pcap = cv2.VideoCapture(1)
         while (True):
             ret, self.frame =self.pcap.read()
             cv2.imshow("pキーで画像を保存 qキーで終了", self.frame)
@@ -88,4 +92,13 @@ class main:
         cv2.destroyAllWindows()               
         
 etmain=main()
+#etmain.out_image=cv2.imread("testpic/L_block.jpg")
 etmain.root.mainloop()
+
+
+#追加コード
+#画像表示の場所指定とサイズ指定
+#output_canvas = Canvas(root, width=320, height=240)
+#output_canvas.place(x=440, y=90)
+#画像をセットする
+#output_canvas.create_image(160, 120, image=self.out_image)

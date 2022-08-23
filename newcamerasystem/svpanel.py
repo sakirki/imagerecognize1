@@ -2,15 +2,20 @@ import tkinter as tk
 from tkinter import *
 import numpy as np
 import colorsys as csys
+import cv2
 
 from setting import Setting
+#from newet2022 import et22
 
 class SV_panel:
     def __init__(self,parent,setfile) :
         self.root = tk.Toplevel()
         self.root.title(u"カラー調整")
         self.root.geometry("800x400")
-        
+        #self.out_image=cv2.imread("testpic/L_block.jpg")
+        #self.out_image=cv2.resize(self.out_image,dsize=(100,100))
+        #self.output_canvas = tk.Canvas(self.root, width=100, height=100)
+        #self.output_canvas.place(x=800, y=500)
         self.main = parent
         
         self.cusf=tk.Frame(self.root)
@@ -40,21 +45,26 @@ class SV_panel:
            # self.s[0] = float(n)
         self.setting.s_con = float(n)
         self.makeContrastLUT(self.setting.s_con, self.setting.s_center, self.SLUT )
+        #self.output_canvas.create_image(800, 500, image=self.out_image)
+        #cv2.imshow()
         
     def cont_s_c(self,n):
            # self.s[1] = float(n)
         self.setting.s_center = float(n)
         self.makeContrastLUT(self.setting.s_con, self.setting.s_center, self.SLUT )
+        #self.output_canvas.create_image(800, 500, image=self.out_image)
         
     def cont_v(self,n):
         #self.v[0] = float(n)
         self.setting.v_con = float(n)
         self.makeContrastLUT(self.setting.v_con, self.setting.v_center, self.VLUT )
+        #self.output_canvas.create_image(800, 500, image=self.out_image)
        
     def cont_v_c(self,n):
         #self.v[1] = float(n)
         self.setting.v_center = float(n)
         self.makeContrastLUT(self.setting.v_con, self.setting.v_center, self.VLUT )
+        #self.output_canvas.create_image(800, 500, image=self.out_image)
         
     def range_red(self,n):
         self.setting.red_range = int(n)
@@ -272,11 +282,7 @@ class SV_panel:
         val= int(self.yellow_e1.get())
         self.setting.yellow_range_center = val 
         self.drawColorBar()
-        
-                 
-    
-               
-       
+
     #カラーバー    
     def drawColorBar(self):
         self.h_range_cv.delete("red1")
