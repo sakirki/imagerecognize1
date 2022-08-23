@@ -19,6 +19,9 @@ class main:
         
         btn1=tk.Button(text="撮影開始",command=self.take_picture)
         btn1.pack()
+       
+        #btn2=tk.Button(text="コントラスト調整",command=self.set_contrast)
+        #btn2.pack()
         
         try:
             setfile = sys.argv[1]
@@ -85,7 +88,7 @@ class main:
                     break # 「q」キーが押されたら終了する
                 
         self.pcap.release()
-        cv2.destroyAllWindows()               
-        
+        cv2.destroyAllWindows() 
+                             
 etmain=main()
 etmain.root.mainloop()
