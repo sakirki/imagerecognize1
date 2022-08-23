@@ -65,7 +65,7 @@ class image_gui():
     def close_clicked(self):
         # メッセージ出力
         res = messagebox.askokcancel("確認", "フォームを閉じますか？")
-        #　フォームを閉じない場合
+        #フォームを閉じない場合
         if res != True:
             # 処理終了
             return        
@@ -189,18 +189,6 @@ class image_gui():
         output_canvas.create_image(160, 120, image=self.out_image3)
         os.remove("./output_facerectangle_image.png")
         
-    ###################
-    # γ補正メソッド     #
-    ###################
-    def gamma_correction(self,image,gamma):
-        # 整数型で2次元配列を作成[256,1]
-        lookup_table = np.zeros((256, 1), dtype = 'uint8')
-        for loop in range(256):
-            # γテーブルを作成
-            lookup_table[loop][0] = 255 * pow(float(loop)/255, 1.0/gamma)
-        # lookup Tableを用いて配列を変換        
-        image_gamma = cv2.LUT(image, lookup_table)
-        return image_gamma
 
     #####################
     # 彩度/明度変更メソッド #
@@ -227,22 +215,20 @@ class image_gui():
     def onSlider(self,args): 
         # 入力ファイルの読み出し
         img = cv2.imread(self.filepath)
-        # ガンマ補正
-        #i_out = self.gamma_correction(img,float(self.gamma.get()))
         # 彩度、明度変更
         i_out = self.saturation_brightness_chg(img,self.Saturation.get(),self.Brightness.get())
-        # GUIに表示する用の画像ファイルを作成
-        cv2.imwrite("output_image.jpeg",i_out)
-        self.chg_out = i_out
-        # 表示用に画像サイズを小さくする
+        #画像を小さくする
         img2 = cv2.resize(i_out,dsize=(320,240))
         #画像の輝度変化を強調する処理
         img2=img2.astype(np.float32)
-        #edge_valueは手動で変えてください輝度変化の値です
-        edge_value=70
-        img_edge=img2-edge_value
+        #kは手動で変えてください
+        k=70
+        img_edge=img2-k
         sigmoid=1/(1+np.exp(-0.1*img_edge))*255
         sigmoid=sigmoid.astype(np.uint8)
+        # GUIに表示する用の画像ファイルを作成
+        cv2.imwrite("output_image.jpeg",sigmoid)
+        self.chg_out = sigmoid
         # 出力画像を保存
         cv2.imwrite("output_mosaic_image.png",sigmoid)
         # 出力画像を保存
@@ -260,7 +246,7 @@ if __name__ == '__main__':
     # 出力ファイル画像表示の場所指定とサイズ指定
     output_canvas = Canvas(root, width=320, height=240)
     output_canvas.place(x=450, y=350)
-    #　入力ファイル画像表示の場所指定とサイズ指定
+    #入力ファイル画像表示の場所指定とサイズ指定
     input_canvas = Canvas(root, width=320, height=240)
     input_canvas.place(x=50, y=350)
     # GUI表示
