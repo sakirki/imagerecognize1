@@ -24,5 +24,4 @@ def save_frame_camera_cycle(device_num, dir_path, basename, cycle, ext='jpg', de
 
     cv2.destroyWindow(window_name)
 
-
 save_frame_camera_cycle(1, 'data/temp', 'camera_capture_cycle', 150)

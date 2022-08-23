@@ -103,9 +103,9 @@ class image_gui():
         # 明度変更用のスケールバーの設定
         self.Brightness = Scale(root, label='明度倍率', orient='h',
                          from_=0.0, to=1.0,length=300,tickinterval=0.1,command=self.onSlider,resolution=0.01)
-        self.Brightness.set(1.0)  
+        self.Brightness.set(1.0)
         self.Brightness.place(x=20,y=150)
-        
+
         # 画像ファイル読み込みと表示用画像サイズに変更と保存
         img = cv2.imread(self.filepath)
         cv2.imwrite("input_image_file.jpeg",img)
@@ -179,7 +179,7 @@ class image_gui():
             # 作成済みの出力ファイル
             img = cv2.imread("./output_image.jpeg")
         # 顔検出と描画する
-        img = self.face_detect(img)            
+        img = self.face_detect(img)
         # 表示用に画像サイズを小さくする
         img2 = cv2.resize(img,dsize=(240,240))
         # 出力画像を保存
@@ -195,7 +195,7 @@ class image_gui():
     #####################
     def saturation_brightness_chg(self,image,saturation,brightness):
         # 色空間をBGRからHSVに変換
-        img_hsv = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)  
+        img_hsv = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
         # 彩度の計算
         img_hsv[:,:,(1)] = img_hsv[:,:,(1)]*saturation
         # 明度の計算
@@ -236,7 +236,7 @@ class image_gui():
         # 画像をセット
         self.out_image2 = ImageTk.PhotoImage(file="output_image_small.png")
         output_canvas.create_image(160, 120, image=self.out_image2)
-            
+
 
 if __name__ == '__main__':
     root = Tk()
