@@ -215,6 +215,9 @@ class image_gui():
     def onSlider(self,args): 
         # 入力ファイルの読み出し
         img = cv2.imread(self.filepath)
+        #元の画像のサイズ保存
+        ori_h,ori_w,c = img.shape
+        print(img.shape)
         # 彩度、明度変更
         i_out = self.saturation_brightness_chg(img,self.Saturation.get(),self.Brightness.get())
         #画像を小さくする
@@ -229,6 +232,8 @@ class image_gui():
         # GUIに表示する用の画像ファイルを作成
         cv2.imwrite("output_image.jpeg",sigmoid)
         self.chg_out = sigmoid
+        # sigmoid.resize()
+        sigmoid = cv2.resize(sigmoid,dsize=(ori_w,ori_h))
         # 出力画像を保存
         cv2.imwrite("output_mosaic_image.png",sigmoid)
         # 出力画像を保存

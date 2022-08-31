@@ -1,7 +1,8 @@
 import cv2
+#画像の差分とってブロックのみ抽出
 
-baseImage = cv2.imread("take_data/offmapp.jpg")
-new_img = cv2.imread("take_data/onmapp.jpg")
+baseImage = cv2.imread("take_data2/cont_off.jpg")
+new_img = cv2.imread("take_data2/cont_on.jpg")
 
 org_frame = cv2.split(baseImage)
 new_frame = cv2.split(new_img)
@@ -30,7 +31,6 @@ fgmask_all = cv2.erode(fgmask_all,kernel,iterations = 4)
 fgmask_all_not = cv2.bitwise_not(fgmask_all)#色反転
 fgmask_not_frame = cv2.cvtColor(fgmask_all_not, cv2.COLOR_GRAY2BGR)#色の変換GRAY→BGR
 
-
 #  fgmask = cv2.morphologyEx(fgmask,cv2.MORPH_CLOSE,kernel)
 # cv2.imshow("mask",fgmask)
 
@@ -39,4 +39,4 @@ mask_img = cv2.bitwise_or(mask_img,fgmask_not_frame)
 
 cv2.imshow("sabun_img",mask_img)
 cv2.waitKey(0)
-cv2.imwrite('take_data/sabun_img.jpg',mask_img)
+#cv2.imwrite('take_data/sabun_img.jpg',mask_img)
